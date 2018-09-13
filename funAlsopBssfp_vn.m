@@ -1,6 +1,8 @@
-function [Mxy, cmat]=funAlsopBssfp_vn(amat, para)
+function [MM, cmat]=funAlsopBssfp_vn(amat, para)
 T1=para.T1;
 T2=para.T2;
+TRg=para.TRg;
+TD=para.TD;
 df=para.df;
 RFthrad=para.RFthrad;
 N_cata=para.N_cata;
@@ -75,7 +77,17 @@ for ii=1:nn
     end
 end
 
-Mxy= sum((squeeze(cmat(1,:,:)+1i*cmat(2,:,:))),1);
+MM=squeeze(sum(cmat,2));
+% Mxy= sum((squeeze(cmat(1,:,:)+1i*cmat(2,:,:))),1);
+% Mxy_ampl= abs(Mxy);
+% Mxy_angle=angle(Mxy);
+
+%relaxization 
+TR_relax=TRg-TD-TR*(N_etl+N_cata);
+[Afpl,Bfpl] = freeprecess(TR_relax,T1,T2,df);
+MM=MM./nn;
+MM(:,N_etl+1) = Afpl*MM(:,N_etl)+Bfpl;
+Mxy= sum((squeeze(MM(1,:,:)+1i*MM(2,:,:))),1);
 Mxy_ampl= abs(Mxy);
 Mxy_angle=angle(Mxy);
 

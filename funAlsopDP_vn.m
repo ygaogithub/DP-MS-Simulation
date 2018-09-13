@@ -1,15 +1,16 @@
-function amat=funAlsopDP_vn(para)
+function amat=funAlsopDP_vn( amat_i, para)
 
 nn=para.nn;
 ranp=para.ranp;
 IsAlsop=para.IsAlsop;
 TD=para.TD;
-df=para.df;
+df=para.df; 
 
 [Atr,Btr] = freeprecess(TD/2,para.T1,para.T2,df);
 
 amat0=zeros(3,5);
-amat0(3,1)=1;
+amat0(:,1)=amat_i;
+% amat0(3,1)=1;
 amat0(:,2)=yrot(pi/2)*amat0(:,1); % the first 90 RF
 
 amat0(:,3)=xrot(pi)*(Atr*amat0(:,2)+Btr); % relaxation and the 180 RF
